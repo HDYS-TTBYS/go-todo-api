@@ -8,6 +8,7 @@ require (
 	github.com/go-chi/cors v1.2.0
 	github.com/go-chi/httplog v0.2.1
 	github.com/go-chi/httprate v0.5.2
+	github.com/gorilla/csrf v1.7.1
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.4
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
@@ -23,7 +24,6 @@ require (
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/gorilla/csrf v1.7.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/hashicorp/hcl/v2 v2.11.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
