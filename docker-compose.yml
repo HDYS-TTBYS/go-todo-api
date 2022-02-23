@@ -1,0 +1,21 @@
+version: "3"
+services:
+    go-todo-api:
+        build: "./dockerfiles/dev/api"
+        tty: true
+        depends_on:
+            - postgres
+        volumes:
+            - ./:/go/src/github.com/HDYS-TTBYS/go-todo-api
+            - go_bin:/go/bin
+    postgres:
+        build: "./dockerfiles/dev/db"
+        tty: true
+        ports:
+            - 5434:5432
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=root
+volumes:
+    go_bin:
