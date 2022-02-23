@@ -18,10 +18,10 @@ type healthResponse struct {
 	Message string `json:"message"`
 }
 
-func newRealthResponse(status int, message string) *healthResponse {
+func newHealthResponse(status int, message string) *healthResponse {
 	return &healthResponse{status, message}
 }
 
 func (hc *healthController) Get(w http.ResponseWriter, r *http.Request) {
-	responseJson(w, r, http.StatusOK, newRealthResponse(200, "OK"))
+	responseJson(w, http.StatusOK, newHealthResponse(200, "OK"))
 }

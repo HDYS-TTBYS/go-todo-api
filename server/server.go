@@ -13,6 +13,7 @@ func Init() error {
 	ro := NewRouter(
 		controllers.NewHealthController(),
 		controllers.NewCsrfController(),
+		controllers.NewAuthController(),
 	)
 	r, err := ro.StartServer(c)
 	if err != nil {

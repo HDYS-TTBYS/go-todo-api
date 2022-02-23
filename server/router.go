@@ -5,6 +5,7 @@ import (
 
 	"github.com/HDYS-TTBYS/go-todo-api/config"
 	"github.com/HDYS-TTBYS/go-todo-api/controllers"
+	"github.com/HDYS-TTBYS/go-todo-api/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -20,10 +21,14 @@ type Router interface {
 type router struct {
 	healthController controllers.HealthController
 	csrfController   controllers.CsrfController
+	authController   controllers.AuthController
 }
 
-func NewRouter(hc controllers.HealthController, cc controllers.CsrfController) Router {
-	return &router{hc, cc}
+func NewRouter(
+	hc controllers.HealthController,
+	cc controllers.CsrfController,
+	ac controllers.AuthController) Router {
+	return &router{hc, cc, ac}
 }
 
 //Serverを起動する
@@ -54,16 +59,10 @@ func (ro router) StartServer(c *config.Config) (*chi.Mux, error) {
 	r.Use(middleware.AllowContentType("application/json"))
 	r.Use(middleware.ContentCharset("UTF-8"))
 	//gorilla csrf
-	var secure bool
-	if c.GO_TODO_ENV == "dev" {
-		secure = false
-	} else {
-		secure = true
-	}
 	csrfMiddleware := csrf.Protect(
 		[]byte(c.CSRF_KEY),
 		csrf.TrustedOrigins([]string{c.FRONTEND_URL}),
-		csrf.Secure(secure),
+		csrf.Secure(utils.IsSecure()),
 		csrf.Path("/"),
 	)
 	r.Use(csrfMiddleware)
@@ -71,6 +70,11 @@ func (ro router) StartServer(c *config.Config) (*chi.Mux, error) {
 	r.Route("/api/v1", func(api chi.Router) {
 		api.Get("/", ro.healthController.Get)
 		api.Get("/csrf", ro.csrfController.Get)
+
+		api.Route("/auth", func(auth chi.Router) {
+			auth.Post("/login", ro.authController.Login)
+			auth.Post("/logout", ro.authController.Logout)
+		})
 	})
 
 	return r, nil

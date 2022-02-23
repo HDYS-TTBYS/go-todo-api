@@ -25,5 +25,5 @@ func newCsrfResponse(token string) *csrfResponse {
 
 func (hc *csrfController) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-CSRF-Token", csrf.Token(r))
-	responseJson(w, r, http.StatusOK, newCsrfResponse(csrf.Token(r)))
+	responseJson(w, http.StatusOK, newCsrfResponse(csrf.Token(r)))
 }
