@@ -1,7 +1,6 @@
 package server
 
 import (
-	"os"
 	"time"
 
 	"github.com/HDYS-TTBYS/go-todo-api/config"
@@ -62,7 +61,7 @@ func (ro router) StartServer(c *config.Config) (*chi.Mux, error) {
 		secure = true
 	}
 	csrfMiddleware := csrf.Protect(
-		[]byte(os.Getenv("CSRF_KEY")),
+		[]byte(c.CSRF_KEY),
 		csrf.TrustedOrigins([]string{c.FRONTEND_URL}),
 		csrf.Secure(secure),
 		csrf.Path("/"),
